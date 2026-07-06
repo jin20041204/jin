@@ -7,7 +7,8 @@ const routes = [
   { path: '/', component: Home },
   { path: '/login', component: Login },
   { path: '/products', component: Products },
-  { path: '/map', component: () => import('./pages/Map.vue') }
+  { path: '/map', component: () => import('./pages/Map.vue') },
+  { path: '/chat', component: () => import('./pages/Chat.vue') }
 ]
 
 const router = createRouter({ history: createWebHistory(), routes })
