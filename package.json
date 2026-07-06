@@ -1,0 +1,12 @@
+{
+  "name": "jin-starter",
+  "version": "1.0.0",
+  "description": "Starter entry for jin repository",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.0.0"
+  }
+}
