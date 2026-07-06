@@ -4,6 +4,7 @@ import com.jin.dto.LoginRequest;
 import com.jin.dto.LoginResponse;
 import com.jin.entity.User;
 import com.jin.repository.UserRepository;
+import com.jin.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,9 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/register")
@@ -30,8 +34,8 @@ public class AuthController {
         u.setPassword(passwordEncoder.encode(req.getPassword()));
         u.setRole("ROLE_USER");
         userRepository.save(u);
-        // token placeholder
-        LoginResponse resp = new LoginResponse(u.getId(), u.getUsername(), u.getRole(), "demo-token");
+        String token = jwtUtil.generateToken(u.getUsername(), u.getRole());
+        LoginResponse resp = new LoginResponse(u.getId(), u.getUsername(), u.getRole(), token);
         return ResponseEntity.ok(resp);
     }
 
@@ -43,8 +47,8 @@ public class AuthController {
         if (!passwordEncoder.matches(req.getPassword(), u.getPassword())) {
             return ResponseEntity.status(401).body("用户名或密码错误");
         }
-        // For now return a demo token; JWT will be added later
-        LoginResponse resp = new LoginResponse(u.getId(), u.getUsername(), u.getRole(), "demo-token");
+        String token = jwtUtil.generateToken(u.getUsername(), u.getRole());
+        LoginResponse resp = new LoginResponse(u.getId(), u.getUsername(), u.getRole(), token);
         return ResponseEntity.ok(resp);
     }
 }
